@@ -1,7 +1,10 @@
 const fs = require('fs');
 
-const index = fs.readFileSync(`${__dirname}/../client/client.html`); // the client.html file
-const style = fs.readFileSync(`${__dirname}/../client/style.css`); // the style.css file
+// the client.html file
+const index = fs.readFileSync(`${__dirname}/../client/client.html`);
+// the style.css file
+const style = fs.readFileSync(`${__dirname}/../client/style.css`);
+
 
 const respond = (request, response, status, content, contentType) => {
   response.writeHead(status, { 'Content-Type': contentType });
@@ -9,6 +12,7 @@ const respond = (request, response, status, content, contentType) => {
   response.end();
 };
 
+//function to create the response json object based on the status and return it.
 const createJSON = (status) => {
   const json = {};
 
@@ -49,6 +53,8 @@ const createJSON = (status) => {
   return json;
 };
 
+//create the response content, if the accepted type from the server is xml, generate xml 
+//and return that, else return json
 const createContent = (acceptedTypes, status) => {
   const content = createJSON(status);
 
@@ -70,11 +76,13 @@ const getIndex = (request, response) => respond(request, response, 200, index, '
 // load and serve style.css
 const getStyle = (request, response) => respond(request, response, 200, style, 'text/css');
 
+//return a success request
 const success = (request, response, acceptedTypes) => {
   const content = createContent(acceptedTypes, '200');
   return respond(request, response, '200', content, acceptedTypes[0]);
 };
 
+//respond to a bad request
 const badRequest = (request, response, acceptedTypes, params) => {
   if (!params.valid || params.valid !== 'true') {
     const content = createContent(acceptedTypes, '400');
@@ -86,6 +94,7 @@ const badRequest = (request, response, acceptedTypes, params) => {
   return respond(request, response, '200', content, acceptedTypes[0]);
 };
 
+//respond to an unauthorized request
 const unauthorized = (request, response, acceptedTypes, params) => {
   if (!params.loggedIn || params.loggedIn !== 'yes') {
     const content = createContent(acceptedTypes, '401');
@@ -97,26 +106,31 @@ const unauthorized = (request, response, acceptedTypes, params) => {
   return respond(request, response, '200', content, acceptedTypes[0]);
 };
 
+//respond to a forbidden request.
 const forbidden = (request, response, acceptedTypes) => {
   const content = createContent(acceptedTypes, '403');
   return respond(request, response, '403', content, acceptedTypes[0]);
 };
 
+//respond to a internal server error request
 const internal = (request, response, acceptedTypes) => {
   const content = createContent(acceptedTypes, '500');
   return respond(request, response, '500', content, acceptedTypes[0]);
 };
 
+//respond to a content not implemented request
 const notImplemented = (request, response, acceptedTypes) => {
   const content = createContent(acceptedTypes, '501');
   return respond(request, response, '501', content, acceptedTypes[0]);
 };
 
+//respond to a page not found request
 const notFound = (request, response, acceptedTypes) => {
   const content = createContent(acceptedTypes, '404');
   return respond(request, response, '404', content, acceptedTypes[0]);
 };
 
+//export the response functions
 module.exports = {
   getIndex,
   getStyle,

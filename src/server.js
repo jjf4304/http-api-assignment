@@ -5,6 +5,7 @@ const responseHandler = require('./responses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
+//container of pages and their respective functions
 const urlStruct = {
   '/': responseHandler.getIndex,
   '/style.css': responseHandler.getStyle,
