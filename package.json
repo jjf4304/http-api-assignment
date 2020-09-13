@@ -1,0 +1,26 @@
+{
+  "name": "http-api-assignment",
+  "version": "1.0.0",
+  "description": "IGME 430 HTTP API homework",
+  "main": "./src/server.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "pretest": "eslint ./src --fix",
+    "test": "echo \"Tests complete\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jjf4304/http-api-assignment.git"
+  },
+  "author": "Joshua Fredrickson",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/jjf4304/http-api-assignment/issues"
+  },
+  "homepage": "https://github.com/jjf4304/http-api-assignment#readme",
+  "devDependencies": {
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-plugin-import": "^2.22.0"
+  }
+}

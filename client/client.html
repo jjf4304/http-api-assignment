@@ -7,6 +7,78 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
 
+  const handleResponse = (xhr, url) =>{
+    const content = document.querySelector("#content");
+    content.innerHTML = '';
+
+    const pageTitle = document.createElement('h1');
+    const responseMessage = document.createElement('p');
+
+    switch(url){
+      case '/success':
+        pageTitle.textContent = "Success";
+        break;
+      case '/badRequest':
+        pageTitle.textContent = 'Bad Request';
+        break;
+      case '/unauthorized':
+        pageTitle.textContent = 'Unauthorized';
+        break;
+      case '/forbidden':
+        pageTitle.textContent = 'Forbidden';
+        break;
+      case '/internal':
+        pageTitle.textContent = 'Internal Error';
+        break;
+      case '/notImplemented':
+        pageTitle.textContent = 'Page Not Implemented';
+        break;
+      case '/notFound':
+        pageTitle.textContent = 'Page Not Found';
+        break;
+      default:
+        pageTitle.textContent = "Error";
+        break;
+    }
+
+    if(xhr.getResponseHeader('content-type') === 'text/xml'){
+      responseMessage.textContent = xhr.responseXML.querySelector('message').textContent;
+      console.log(xhr.responseXML);
+    }
+    else{
+      const responseJSON = JSON.parse(xhr.response);
+      responseMessage.textContent = responseJSON.message;
+      console.log(responseJSON);
+    }
+    content.appendChild(pageTitle);
+    content.appendChild(responseMessage);
+  };
+
+  const sendAjax = (url, acceptedTypes) =>{
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.open('GET', url);
+    xhr.setRequestHeader('Accept', acceptedTypes);
+
+    xhr.onload = () => handleResponse(xhr, url);
+
+    xhr.send();
+  };
+
+  const init = () =>{
+    const sendButton = document.querySelector("#send");
+    const pageSelect = document.querySelector("#page");
+    const typeSelect = document.querySelector("#type");
+
+    sendButton.addEventListener('click', () =>{
+      sendAjax(pageSelect.value, type.value);
+    });
+
+  };
+
+  window.onload = init;
+
   </script>
 </head>
 <body>
